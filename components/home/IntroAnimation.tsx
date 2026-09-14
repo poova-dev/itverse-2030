@@ -13,14 +13,37 @@ const steps = [
 ];
 
 const STORAGE_KEY = "itverse-intro-seen";
-const STEP_DURATION = 1150;
-const PAUSE_BEFORE_EXIT = 900;
+
+// ============================================================================
+// TIMING CONFIGURATION (Change these numbers to adjust the speed)
+// ============================================================================
+// Time in milliseconds (ms) each year (2026, 2027, etc.) stays on screen:
+//   - 800  = Faster
+//   - 1200 = Moderate / Balanced (current default)
+//   - 1600 = Slower / Cinematic
+//   - 2000 = Very slow
+export const DEFAULT_STEP_DURATION = 1200;
+
+// Pause in milliseconds on "2030+" before fading to the home page:
+//   - 600  = Quick transition
+//   - 1000 = Balanced pause (current default)
+//   - 1500 = Extended dramatic pause
+export const DEFAULT_PAUSE_BEFORE_EXIT = 1000;
+// ============================================================================
 
 interface IntroAnimationProps {
   onComplete: () => void;
+  /** Optional custom duration per step in ms (overrides DEFAULT_STEP_DURATION) */
+  stepDuration?: number;
+  /** Optional pause duration before exit in ms (overrides DEFAULT_PAUSE_BEFORE_EXIT) */
+  pauseBeforeExit?: number;
 }
 
-export function IntroAnimation({ onComplete }: IntroAnimationProps) {
+export function IntroAnimation({
+  onComplete,
+  stepDuration = DEFAULT_STEP_DURATION,
+  pauseBeforeExit = DEFAULT_PAUSE_BEFORE_EXIT,
+}: IntroAnimationProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [visible, setVisible] = useState(true);
 
@@ -42,15 +65,15 @@ export function IntroAnimation({ onComplete }: IntroAnimationProps) {
             setVisible(false);
             sessionStorage.setItem(STORAGE_KEY, "true");
             setTimeout(onComplete, 700);
-          }, PAUSE_BEFORE_EXIT);
+          }, pauseBeforeExit);
           return prev;
         }
         return prev + 1;
       });
-    }, STEP_DURATION);
+    }, stepDuration);
 
     return () => clearInterval(timer);
-  }, [onComplete]);
+  }, [onComplete, stepDuration, pauseBeforeExit]);
 
   const handleSkip = useCallback(() => {
     setVisible(false);
