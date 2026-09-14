@@ -14,17 +14,27 @@ import {
 } from "@/components/home/HomeSections";
 
 export default function HomePage() {
-  const [showIntro, setShowIntro] = useState(() => {
-    if (typeof window === "undefined") return false;
-    try {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get("intro") === "true" || urlParams.get("intro") === "1") return true;
-      const seen = sessionStorage.getItem("itverse_intro_seen");
-      return !seen;
-    } catch {
-      return false;
-    }
-  });
+  const [showIntro, setShowIntro] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("intro") === "true" || urlParams.get("intro") === "1") {
+          setShowIntro(true);
+          return;
+        }
+        const seen = sessionStorage.getItem("itverse_intro_seen");
+        if (!seen) {
+          setShowIntro(true);
+        }
+      } catch {
+        // Fallback
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleIntroComplete = useCallback(() => {
     setShowIntro(false);

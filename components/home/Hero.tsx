@@ -23,26 +23,31 @@ const yearPhases: YearPhase[] = [
 export function Hero() {
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [prefersReducedMotion] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  });
-
-  const [activeYearIndex, setActiveYearIndex] = useState(() => {
-    if (typeof window === "undefined") return 0;
-    try {
-      const savedYear = localStorage.getItem("itverse_last_year");
-      if (savedYear) {
-        const foundIdx = yearPhases.findIndex((p) => p.year === savedYear);
-        if (foundIdx !== -1) return foundIdx;
-      }
-    } catch {
-      // LocalStorage fallback
-    }
-    return 0;
-  });
-
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [activeYearIndex, setActiveYearIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Synchronize reduced motion & saved year after initial hydration to prevent SSR mismatch
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const timer = setTimeout(() => {
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      if (mediaQuery.matches) setPrefersReducedMotion(true);
+
+      try {
+        const savedYear = localStorage.getItem("itverse_last_year");
+        if (savedYear) {
+          const foundIdx = yearPhases.findIndex((p) => p.year === savedYear);
+          if (foundIdx !== -1) setActiveYearIndex(foundIdx);
+        }
+      } catch {
+        // LocalStorage fallback
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Year progression loop (documentary acceleration: 2026 -> 2027 -> 2028 -> 2029 -> 2030 -> 2030+)
   useEffect(() => {
@@ -63,7 +68,11 @@ export function Hero() {
 
   const toggleVideoPlayback = () => {
     if (!videoRef.current) return;
-    if (videoRef.current.paused) {
+    if (videoRef.current.ended) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play();
+      setIsPlaying(true);
+    } else if (videoRef.current.paused) {
       videoRef.current.play();
       setIsPlaying(true);
     } else {
@@ -71,6 +80,19 @@ export function Hero() {
       setIsPlaying(false);
     }
   };
+
+  // Replay video from beginning when intro replay event fires
+  useEffect(() => {
+    const handleReplay = () => {
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play();
+        setIsPlaying(true);
+      }
+    };
+    window.addEventListener("itverse-replay-intro", handleReplay);
+    return () => window.removeEventListener("itverse-replay-intro", handleReplay);
+  }, []);
 
   const currentPhase = yearPhases[activeYearIndex];
 
@@ -85,8 +107,8 @@ export function Hero() {
           ref={videoRef}
           autoPlay
           muted
-          loop
           playsInline
+          onEnded={() => setIsPlaying(false)}
           onLoadedData={() => setVideoLoaded(true)}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
             videoLoaded ? "opacity-100" : "opacity-0"
