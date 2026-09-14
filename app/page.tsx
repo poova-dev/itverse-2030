@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { IntroAnimation } from "@/components/home/IntroAnimation";
 import { Hero } from "@/components/home/Hero";
 import {
@@ -14,16 +14,37 @@ import {
 } from "@/components/home/HomeSections";
 
 export default function HomePage() {
-  const [introComplete, setIntroComplete] = useState(false);
+  const [showIntro, setShowIntro] = useState(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("intro") === "true" || urlParams.get("intro") === "1") return true;
+      const seen = sessionStorage.getItem("itverse_intro_seen");
+      return !seen;
+    } catch {
+      return false;
+    }
+  });
 
   const handleIntroComplete = useCallback(() => {
-    setIntroComplete(true);
+    setShowIntro(false);
+    try {
+      sessionStorage.setItem("itverse_intro_seen", "true");
+    } catch { }
+  }, []);
+
+  useEffect(() => {
+    const handleReplay = () => {
+      setShowIntro(true);
+    };
+    window.addEventListener("itverse-replay-intro", handleReplay);
+    return () => window.removeEventListener("itverse-replay-intro", handleReplay);
   }, []);
 
   return (
     <>
-      {!introComplete && <IntroAnimation onComplete={handleIntroComplete} />}
-      <div className={introComplete ? "animate-fade-in" : "opacity-0"}>
+      {showIntro && <IntroAnimation onComplete={handleIntroComplete} />}
+      <div className="w-full">
         <Hero />
         <WhyShiftMatters />
         <TimelinePreview />

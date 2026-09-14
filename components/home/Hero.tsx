@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ArrowRight, Play, Pause, Compass, Layers } from "lucide-react";
+import { ArrowRight, Play, Pause, Compass, Layers, RotateCcw } from "lucide-react";
 
 interface YearPhase {
   year: string;
@@ -42,15 +42,6 @@ export function Hero() {
   });
 
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  // Record intro seen in LocalStorage on mount
-  useEffect(() => {
-    try {
-      localStorage.setItem("itverse_intro_seen", "true");
-    } catch {
-      // LocalStorage fallback
-    }
-  }, []);
 
   // Year progression loop (documentary acceleration: 2026 -> 2027 -> 2028 -> 2029 -> 2030 -> 2030+)
   useEffect(() => {
@@ -245,6 +236,18 @@ export function Hero() {
               </div>
 
               <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.dispatchEvent(new CustomEvent("itverse-replay-intro"));
+                  }}
+                  className="inline-flex items-center gap-1 text-xs font-medium text-[#475569] hover:text-[#0F172A] hover:bg-slate-100 px-2 py-1 rounded-md transition-colors"
+                  title="Replay 2026→2030+ Intro Sequence"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Replay Intro</span>
+                </button>
+
                 <Link
                   href="/timeline"
                   className="inline-flex items-center gap-1 text-xs font-semibold text-[#2563EB] hover:underline"
