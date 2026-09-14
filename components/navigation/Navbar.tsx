@@ -53,10 +53,10 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 hidden md:block ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 hidden md:block ${
         scrolled
-          ? "bg-white/90 backdrop-blur-md border-b border-border shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
-          : "bg-transparent"
+          ? "bg-white/90 backdrop-blur-md border-b border-border shadow-[0_1px_4px_rgba(0,0,0,0.04)] py-0"
+          : "bg-white/60 backdrop-blur-sm border-b border-border/40 py-0.5"
       }`}
     >
       <nav className="container-wide flex items-center justify-between h-16" aria-label="Main navigation">
