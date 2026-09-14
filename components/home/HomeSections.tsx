@@ -7,6 +7,7 @@ import { timelineData } from "@/data/timeline";
 import { rolesData } from "@/data/roles";
 import { researchData } from "@/data/research";
 import { Badge } from "@/components/shared/Badge";
+import { Spotlight } from "@/components/motion/Spotlight";
 
 /* ---------- Why the Shift Matters ---------- */
 export function WhyShiftMatters() {
@@ -33,7 +34,8 @@ export function WhyShiftMatters() {
               { stat: "+280%", label: "YoY surge in job postings requiring Agentic AI skills (Lightcast / Stanford)", type: "evidence" as const },
               { stat: "85M+", label: "global skilled worker deficit projected by 2030 (Korn Ferry)", type: "forecast" as const },
             ].map((item) => (
-              <div key={item.stat} className="card-elevated p-5">
+              <div key={item.stat} className="card-elevated p-5 relative overflow-hidden group">
+                <Spotlight size={220} />
                 <Badge type={item.type} />
                 <p className="text-2xl md:text-3xl font-bold text-text-primary mt-3">{item.stat}</p>
                 <p className="text-xs md:text-sm text-text-secondary mt-1 leading-snug">{item.label}</p>
@@ -195,7 +197,8 @@ export function RolesPreview() {
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {featured.map((role) => (
-            <div key={role.id} className="card-elevated p-5 flex flex-col justify-between">
+            <div key={role.id} className="card-elevated p-5 flex flex-col justify-between relative overflow-hidden group">
+              <Spotlight size={240} />
               <div>
                 <div className="flex items-start justify-between gap-2 mb-1.5">
                   <h3 className="text-base font-semibold text-text-primary leading-snug">{role.title}</h3>

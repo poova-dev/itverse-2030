@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, Play, Pause, Compass, Layers, RotateCcw } from "lucide-react";
+import { TextEffect } from "@/components/motion/TextEffect";
 
 interface YearPhase {
   year: string;
@@ -139,10 +140,16 @@ export function Hero() {
             </span>
           </div>
 
-          {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#0F172A] leading-[1.06]">
+          {/* Main Headline with Motion Primitives TextEffect */}
+          <TextEffect
+            as="h1"
+            preset="fade-in-blur"
+            per="word"
+            delay={0.15}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#0F172A] leading-[1.06]"
+          >
             The way we build technology is changing.
-          </h1>
+          </TextEffect>
 
           {/* Supporting Statement */}
           <p className="mt-6 text-lg sm:text-xl text-[#475569] leading-relaxed font-normal">
