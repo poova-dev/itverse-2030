@@ -130,4 +130,76 @@ export const researchData: ResearchItem[] = [
       "Underscores that the shift is not only about new roles but about every professional evolving their skill set — continuous learning becomes essential.",
     sourceUrl: "https://www.weforum.org/publications/the-future-of-jobs-report-2025/",
   },
+  {
+    id: "kornferry-talent-shortage-2030",
+    organization: "Korn Ferry",
+    report: "The $8.5 Trillion Talent Shortage",
+    year: 2025,
+    type: "forecast",
+    keyFinding:
+      "Projects an 85M+ skilled tech worker deficit globally by 2030, threatening $8.5 trillion in unrealized annual revenue if organizations and institutions fail to educate and upskill workers.",
+    whyItMatters:
+      "Demonstrates that AI does not simply eliminate work; it creates an unprecedented demand for skilled professionals who can direct, govern, and orchestrate intelligent systems.",
+    sourceUrl: "https://www.kornferry.com/insights/this-week-in-leadership/talent-crunch-future-of-work",
+  },
+  {
+    id: "mckinsey-skill-partnerships-2025",
+    organization: "McKinsey Global Institute",
+    report: "Agents, Robots, and Us: Skill Partnerships in the Age of AI",
+    year: 2025,
+    type: "evidence",
+    keyFinding:
+      "Current AI capabilities can technically automate roughly 57% of US work hours today. However, maximum organizational performance comes from human-agent collaborative partnerships rather than direct worker displacement.",
+    whyItMatters:
+      "Reframes technology change from job loss to role evolution, emphasizing systems orchestration, judgment, and oversight as core competencies.",
+    sourceUrl: "https://www.mckinsey.com/mgi/overview",
+  },
+  {
+    id: "stanford-agentic-ai-surge",
+    organization: "Stanford HAI / Lightcast",
+    report: "Agentic AI & Emerging Labor Index",
+    year: 2026,
+    type: "evidence",
+    keyFinding:
+      "Job postings demanding Agentic AI skills surged by +280% in one year. AI skills now appear in 2.5% of all US job postings — a 297% jump since 2013 and up 55% year-over-year.",
+    whyItMatters:
+      "Provides hard market data showing that enterprise hiring is pivoting rapidly toward autonomous multi-step agent design and orchestration.",
+    sourceUrl: "https://aiindex.stanford.edu/",
+  },
+  {
+    id: "gartner-cloud-ai-2029",
+    organization: "Gartner",
+    report: "Top Trends in Cloud Computing to 2029",
+    year: 2025,
+    type: "forecast",
+    keyFinding:
+      "50% of all cloud computing resources will support AI/ML workloads by 2029, while 70% of new enterprise applications will be built using low-code/no-code platforms.",
+    whyItMatters:
+      "Proves infrastructure is shifting toward AI-native compute and edge-cloud hybrids, while routine app development is democratized to citizen developers.",
+    sourceUrl: "https://www.gartner.com/en/newsroom",
+  },
+  {
+    id: "idc-spatial-computing-2030",
+    organization: "IDC",
+    report: "Worldwide Augmented and Virtual Reality Headset Forecast",
+    year: 2026,
+    type: "forecast",
+    keyFinding:
+      "Enterprise XR headset shipments will grow from 3.2M to 10.4M by 2030 (34% CAGR), led by enterprise smart glasses shipments leaping from 3M to 12.2M units at a 41.9% CAGR.",
+    whyItMatters:
+      "Signals that spatial computing (AR/VR) will become a dominant human interface for remote collaboration, 3D systems engineering, and virtual data visualization.",
+    sourceUrl: "https://www.idc.com/",
+  },
+  {
+    id: "isc2-cybersecurity-gap",
+    organization: "ISC2",
+    report: "Cybersecurity Workforce Study",
+    year: 2025,
+    type: "evidence",
+    keyFinding:
+      "Over 95% of organizations report critical cybersecurity skill gaps. AI has simultaneously enabled automated attacker campaigns while making AI-driven security operations (AI-SecOps) essential.",
+    whyItMatters:
+      "Identifies security as the single highest-priority constraint on AI adoption, driving immense demand for professionals fluent in AI threat mitigation and regulatory compliance.",
+    sourceUrl: "https://www.isc2.org/research",
+  },
 ];

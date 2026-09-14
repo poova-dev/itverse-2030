@@ -1,11 +1,12 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { motion } from "framer-motion";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionWrapper } from "@/components/shared/SectionWrapper";
 import { type ScoreMap, calculateReadinessScore, getReadinessCategories } from "@/lib/scoring";
 import { getRecommendedRoles, getStrengths, getGaps, getLearningPath } from "@/lib/recommendations";
+import { personaRoadmaps } from "@/data/roadmaps";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
@@ -40,13 +41,13 @@ export default function ReadinessPage() {
         <PageHeader
           eyebrow="Readiness"
           title="Are You Ready for 2030?"
-          subtitle="Take the career simulator first to see your personalized readiness assessment."
+          subtitle="Explore dynamic career roadmaps or take the career simulator for a personalized readiness score."
         />
         <SectionWrapper className="pb-20 md:pb-28">
-          <div className="container-default text-center">
-            <div className="card-elevated p-8 max-w-md mx-auto">
+          <div className="container-default">
+            <div className="card-elevated p-8 max-w-md mx-auto text-center mb-12">
               <p className="text-sm text-text-secondary mb-6">
-                Complete the career simulator to generate your Future Readiness Score and personalized recommendations.
+                Complete the career simulator to generate your personalized Future Readiness Score and tailored role recommendations.
               </p>
               <Link
                 href="/simulator"
@@ -56,6 +57,8 @@ export default function ReadinessPage() {
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
+
+            <RoadmapsSection />
           </div>
         </SectionWrapper>
       </>
@@ -212,6 +215,9 @@ export default function ReadinessPage() {
             </div>
           )}
 
+          {/* Persona Roadmaps */}
+          <RoadmapsSection />
+
           {/* Retake */}
           <div className="text-center mt-12">
             <Link
@@ -224,5 +230,96 @@ export default function ReadinessPage() {
         </div>
       </SectionWrapper>
     </>
+  );
+}
+
+function RoadmapsSection() {
+  const [activePersonaId, setActivePersonaId] = useState<"student" | "mid-level" | "switcher">("student");
+  const activePersona = personaRoadmaps.find((p) => p.id === activePersonaId) || personaRoadmaps[0];
+
+  return (
+    <div className="mt-12 text-left">
+      <div className="mb-6">
+        <span className="text-xs font-semibold uppercase tracking-[0.15em] text-accent block mb-1">
+          Career Readiness Framework
+        </span>
+        <h3 className="text-xl font-bold tracking-tight text-text-primary">
+          Dynamic Skill Roadmaps by Persona
+        </h3>
+        <p className="text-xs md:text-sm text-text-secondary mt-1">
+          Explore proven phase-by-phase learning paths for students, experienced developers, and career switchers:
+        </p>
+      </div>
+
+      {/* Persona Tabs */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {personaRoadmaps.map((persona) => (
+          <button
+            key={persona.id}
+            onClick={() => setActivePersonaId(persona.id)}
+            className={`px-4 py-2 text-xs md:text-sm font-medium rounded-lg transition-all ${
+              activePersonaId === persona.id
+                ? "bg-accent text-white shadow-sm"
+                : "bg-white border border-border text-text-secondary hover:text-text-primary hover:border-gray-300"
+            }`}
+          >
+            {persona.title}
+          </button>
+        ))}
+      </div>
+
+      {/* Active Persona Card */}
+      <div className="card-elevated p-6 md:p-8">
+        <div className="mb-6 pb-4 border-b border-border-light">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-accent">
+            {activePersona.tagline}
+          </span>
+          <h4 className="text-base md:text-lg font-bold text-text-primary mt-0.5">{activePersona.title}</h4>
+          <p className="text-xs md:text-sm text-text-secondary mt-1 leading-relaxed">
+            {activePersona.description}
+          </p>
+        </div>
+
+        {/* Phase Grid */}
+        <div className="grid md:grid-cols-2 gap-4">
+          {activePersona.phases.map((phase, idx) => (
+            <div
+              key={phase.phase}
+              className="p-4 rounded-xl bg-gray-50/70 border border-border-light flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="w-5 h-5 rounded-full bg-accent/10 text-accent text-[11px] font-bold flex items-center justify-center">
+                    {idx + 1}
+                  </span>
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
+                    {phase.phase}
+                  </span>
+                </div>
+                <h5 className="text-sm font-bold text-text-primary mb-2">{phase.focus}</h5>
+                <ul className="space-y-1.5 mb-4">
+                  {phase.milestones.map((m) => (
+                    <li key={m} className="text-xs text-text-secondary flex items-start gap-1.5">
+                      <span className="text-accent mt-0.5">•</span>
+                      <span>{m}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex flex-wrap gap-1.5 pt-3 border-t border-gray-200/60">
+                {phase.keyTools.map((t) => (
+                  <span
+                    key={t}
+                    className="px-2 py-0.5 text-[10px] font-medium bg-white text-text-secondary border border-border-light rounded-md"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

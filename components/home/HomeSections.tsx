@@ -26,16 +26,17 @@ export function WhyShiftMatters() {
             of developers. Agentic workflows are emerging in enterprise environments. The question
             is no longer whether work will change — but how professionals will adapt.
           </p>
-          <div className="mt-8 grid sm:grid-cols-3 gap-4">
+          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { stat: "76%", label: "of developers use or plan to use AI tools", type: "evidence" as const },
-              { stat: "86%", label: "of employers expect AI to transform business by 2030", type: "forecast" as const },
-              { stat: "33%", label: "of enterprise apps may include agentic AI by 2028", type: "forecast" as const },
+              { stat: "84%", label: "of developers routinely use AI tools in daily workflows (Stack Overflow)", type: "evidence" as const },
+              { stat: "~57%", label: "of US work hours technically automatable by modern AI (McKinsey MGI)", type: "evidence" as const },
+              { stat: "+280%", label: "YoY surge in job postings requiring Agentic AI skills (Lightcast / Stanford)", type: "evidence" as const },
+              { stat: "85M+", label: "global skilled worker deficit projected by 2030 (Korn Ferry)", type: "forecast" as const },
             ].map((item) => (
               <div key={item.stat} className="card-elevated p-5">
                 <Badge type={item.type} />
                 <p className="text-2xl md:text-3xl font-bold text-text-primary mt-3">{item.stat}</p>
-                <p className="text-sm text-text-secondary mt-1 leading-snug">{item.label}</p>
+                <p className="text-xs md:text-sm text-text-secondary mt-1 leading-snug">{item.label}</p>
               </div>
             ))}
           </div>

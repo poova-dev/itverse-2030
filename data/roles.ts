@@ -2,6 +2,7 @@ export interface Role {
   id: string;
   title: string;
   category: "engineering" | "security" | "product" | "architecture" | "design";
+  demandGrowth?: string;
   description: string;
   responsibilities: string[];
   whyItMatters: string;
@@ -17,6 +18,7 @@ export const rolesData: Role[] = [
     id: "ai-engineer",
     title: "AI Engineer",
     category: "engineering",
+    demandGrowth: "~+400% by 2030",
     description:
       "Designs, builds, and maintains AI-powered systems that integrate large language models, machine learning pipelines, and intelligent automation into production applications.",
     responsibilities: [
@@ -40,6 +42,7 @@ export const rolesData: Role[] = [
     id: "ai-agent-engineer",
     title: "AI Agent Engineer",
     category: "engineering",
+    demandGrowth: "~+420% by 2030",
     description:
       "Specializes in building autonomous AI agents that can execute multi-step workflows, interact with tools and APIs, and operate with appropriate human oversight.",
     responsibilities: [
@@ -63,6 +66,7 @@ export const rolesData: Role[] = [
     id: "llmops-engineer",
     title: "LLMOps Engineer",
     category: "engineering",
+    demandGrowth: "~+400% by 2030",
     description:
       "Manages the operational lifecycle of large language models — from deployment and monitoring to cost optimization and version management.",
     responsibilities: [
@@ -84,31 +88,33 @@ export const rolesData: Role[] = [
   },
   {
     id: "ai-security-engineer",
-    title: "AI Security Engineer",
+    title: "Cybersecurity AI Analyst / Engineer",
     category: "security",
+    demandGrowth: "~+300% by 2030",
     description:
-      "Protects AI systems from adversarial attacks, data poisoning, prompt injection, and other AI-specific security threats while ensuring responsible AI deployment.",
+      "Protects AI systems from adversarial attacks, data poisoning, prompt injection, and automated cyber threats while leveraging AI for automated threat detection.",
     responsibilities: [
       "Assess and mitigate AI-specific security vulnerabilities",
       "Implement prompt injection defenses and content filtering",
       "Design secure AI system architectures",
-      "Conduct red-team exercises for AI systems",
+      "Hunt AI-driven threats and configure automated security detection",
       "Develop AI security policies and incident response plans",
     ],
     whyItMatters:
-      "AI systems introduce novel attack surfaces that traditional cybersecurity approaches may not adequately address.",
-    technicalSkills: ["AI security frameworks", "Adversarial ML", "Prompt injection defense", "Data security", "Audit"],
-    humanSkills: ["Threat modeling", "Ethical reasoning", "Communication"],
-    tools: ["AI red-teaming frameworks", "Security scanners", "Audit platforms", "OWASP AI guidelines"],
+      "95% of organizations face cybersecurity skill gaps while attackers scale exploits with AI — making AI-SecOps defensive expertise essential.",
+    technicalSkills: ["AI security frameworks", "Adversarial ML", "Prompt injection defense", "Security+ / CySA+", "Threat hunting"],
+    humanSkills: ["Threat modeling", "Ethical reasoning", "High-stress communication"],
+    tools: ["AI red-teaming frameworks", "Security scanners", "SIEM/SOAR platforms", "OWASP AI guidelines"],
     currentRelevance:
-      "Emerging — growing rapidly as AI deployment increases attack surface.",
+      "Critical — rapidly accelerating with AI-generated exploits.",
     futureDirection:
-      "Likely to become a mandatory function in any organization deploying AI at scale.",
+      "Mandatory function in every enterprise deploying autonomous agents or sensitive data pipelines.",
   },
   {
     id: "cloud-architect",
     title: "Cloud Architect",
     category: "architecture",
+    demandGrowth: "~+310% by 2030",
     description:
       "Designs and governs cloud infrastructure and platform architecture that supports AI workloads, distributed systems, and global-scale operations.",
     responsibilities: [
@@ -119,65 +125,134 @@ export const rolesData: Role[] = [
       "Guide teams on cloud-native development practices",
     ],
     whyItMatters:
-      "Cloud infrastructure is the foundation for AI, distributed teams, and modern applications — architecture decisions have long-term impact.",
-    technicalSkills: ["Cloud platforms", "Infrastructure as code", "Networking", "Security", "Cost optimization"],
+      "Gartner forecasts 50% of cloud resources will run AI/ML by 2029 — infrastructure architecture is the backbone of the intelligent enterprise.",
+    technicalSkills: ["Cloud platforms (AWS/Azure/GCP)", "Infrastructure as code", "Kubernetes", "FinOps", "Edge computing"],
     humanSkills: ["Strategic thinking", "Stakeholder management", "Technical leadership"],
     tools: ["AWS/Azure/GCP", "Terraform", "Kubernetes", "Cloud-native monitoring", "FinOps tools"],
     currentRelevance:
-      "Established — already a critical role that continues to evolve with AI workload requirements.",
+      "Established — evolving rapidly with AI workload requirements.",
     futureDirection:
-      "Will increasingly focus on AI infrastructure, edge computing, and sustainable cloud architecture.",
+      "Will increasingly focus on specialized AI silicon, edge computing, and sovereign cloud fabrics.",
+  },
+  {
+    id: "cloud-finops-specialist",
+    title: "Cloud FinOps Specialist",
+    category: "architecture",
+    demandGrowth: "~+340% by 2030",
+    description:
+      "Analyzes and optimizes cloud consumption and AI workload unit economics, enforcing cost guardrails and maximizing ROI on generative AI and GPU infrastructure.",
+    responsibilities: [
+      "Analyze multi-cloud usage patterns and AI training/inference costs",
+      "Implement automated budget alerts, anomaly detection, and cost guardrails",
+      "Collaborate with AI engineering teams to optimize GPU allocation and token usage",
+      "Establish FinOps governance metrics across cloud architectures",
+      "Forecast technology infrastructure investments and cloud vendor commitments",
+    ],
+    whyItMatters:
+      "With AI compute expenses expanding exponentially, organizations need specialists to ensure that intelligent infrastructure remains financially sustainable.",
+    technicalSkills: ["Multi-cloud architecture (AWS/Azure/GCP)", "Cost analytics", "Kubernetes resource sizing", "SQL/BI tools", "FinOps tooling"],
+    humanSkills: ["Cross-functional negotiation", "Strategic financial planning", "Communication"],
+    tools: ["FinOps Foundation standards", "AWS Cost Explorer", "Kubecost", "Datadog Cloud Cost", "Terraform"],
+    currentRelevance: "High — rising as AI infrastructure expenses pressure enterprise budgets.",
+    futureDirection: "Will become an indispensable partner to engineering and finance leadership.",
   },
   {
     id: "ai-governance-specialist",
-    title: "AI Governance Specialist",
+    title: "AI Ethics & Governance Specialist",
     category: "product",
+    demandGrowth: "~+350% by 2030",
     description:
-      "Develops and enforces policies, standards, and frameworks that ensure AI systems are deployed responsibly, ethically, and in compliance with regulations.",
+      "Develops and enforces policies, standards, and frameworks that ensure AI systems are deployed responsibly, ethically, and in compliance with regulations like the EU AI Act.",
     responsibilities: [
-      "Define organizational AI governance policies",
-      "Assess AI systems for bias, fairness, and compliance",
-      "Manage AI risk and ethical review processes",
-      "Monitor regulatory developments and ensure compliance",
-      "Bridge technical AI teams with legal and compliance functions",
+      "Define organizational AI governance policies and ethical guardrails",
+      "Design AI audit trails and assess models for bias and compliance",
+      "Manage AI risk, transparency disclosures, and ethical review processes",
+      "Monitor global regulatory developments (EU AI Act, GDPR, NIST)",
+      "Bridge technical AI teams with legal, risk, and executive compliance functions",
     ],
     whyItMatters:
-      "As AI regulation increases globally, organizations need professionals who can navigate the intersection of technology, ethics, and compliance.",
+      "Global compliance mandates make ethical oversight, fairness metrics, and liability management existential for enterprises deploying AI.",
     technicalSkills: ["AI auditing", "Fairness metrics", "Regulatory frameworks", "Risk assessment", "Data governance"],
     humanSkills: ["Ethical reasoning", "Policy writing", "Cross-functional communication", "Negotiation"],
     tools: ["AI audit platforms", "Bias detection tools", "Compliance frameworks", "Documentation systems"],
     currentRelevance:
-      "Growing — regulatory pressure (EU AI Act, US executive orders) is accelerating demand.",
+      "Surging — regulatory enforcement is accelerating global demand.",
     futureDirection:
-      "Expected to become a required function in organizations above a certain scale, similar to data protection officers.",
+      "Will function similarly to corporate data protection and chief compliance officers.",
   },
   {
     id: "data-privacy-engineer",
     title: "Data Privacy Engineer",
     category: "security",
+    demandGrowth: "~+310% by 2030",
     description:
-      "Implements technical systems that protect user privacy, ensure data compliance, and enable responsible data use in AI and analytics pipelines.",
+      "Implements technical systems that protect user privacy, ensure regulatory compliance, and enable responsible data use in AI and analytics pipelines.",
     responsibilities: [
-      "Implement privacy-preserving data architectures",
+      "Implement privacy-preserving data architectures and anonymization",
       "Build consent management and data lifecycle systems",
-      "Ensure compliance with GDPR, CCPA, and emerging privacy regulations",
-      "Design anonymization and differential privacy mechanisms",
-      "Audit data flows across AI and analytics systems",
+      "Ensure compliance with GDPR, CCPA, and emerging global privacy laws",
+      "Design differential privacy mechanisms and data masking layers",
+      "Audit data flows across AI training sets and analytics systems",
     ],
     whyItMatters:
-      "AI systems require large amounts of data — privacy engineering ensures this data is used responsibly and legally.",
-    technicalSkills: ["Privacy engineering", "Encryption", "Data anonymization", "Regulatory compliance", "Audit systems"],
+      "AI systems rely on immense datasets — privacy engineering guarantees data utility while rigorously protecting individual rights.",
+    technicalSkills: ["Privacy engineering", "Encryption", "Data anonymization", "Differential privacy", "Audit systems"],
     humanSkills: ["Attention to detail", "Ethical awareness", "Legal interpretation"],
     tools: ["Privacy-enhancing technologies", "Data catalogs", "Consent management platforms", "Audit tools"],
     currentRelevance:
-      "Established — demand has grown steadily with expanding privacy regulations.",
+      "Established — expanding rapidly with enterprise AI data ingestion.",
     futureDirection:
-      "Will become more complex as AI systems process increasingly diverse and sensitive data types.",
+      "Will incorporate cryptographic privacy (homomorphic encryption, zero-knowledge proofs).",
+  },
+  {
+    id: "no-code-automation-specialist",
+    title: "No-Code / Automation Specialist",
+    category: "product",
+    demandGrowth: "~+380% by 2030",
+    description:
+      "Designs and deploys automated workflows, connecting enterprise SaaS tools, databases, and AI capabilities without writing manual boilerplate code.",
+    responsibilities: [
+      "Architect cross-platform workflows connecting CRM, ERP, and communication tools",
+      "Embed AI actions, document parsing, and agentic triggers into business processes",
+      "Empower and govern citizen developers across business departments",
+      "Eliminate repetitive manual tasks across operations and development",
+      "Maintain data integrity and security across automated integration hooks",
+    ],
+    whyItMatters:
+      "Gartner forecasts 70% of new enterprise apps will leverage low-code/no-code by 2026. Specialists accelerate business velocity while freeing developers for core architectures.",
+    technicalSkills: ["Workflow logic", "REST APIs & Webhooks", "Data mapping", "Prompt engineering", "Authentication (OAuth)"],
+    humanSkills: ["Business process analysis", "User training", "Agile problem solving"],
+    tools: ["Zapier", "Make.com", "n8n", "Microsoft PowerAutomate", "Airtable"],
+    currentRelevance: "Established & accelerating — critical for bridging business teams and tech capabilities.",
+    futureDirection: "Will evolve into autonomous agent orchestration across decentralized business software.",
+  },
+  {
+    id: "autonomous-systems-governance-engineer",
+    title: "Autonomous Systems Governance Engineer",
+    category: "security",
+    demandGrowth: "~+320% by 2030",
+    description:
+      "Defines deterministic safety boundaries, audit trails, and legal accountability frameworks for autonomous systems, robotics, drones, and agentic software loops.",
+    responsibilities: [
+      "Define operational safety limits and fallback protocols for autonomous systems",
+      "Design tamper-proof audit trails for AI decision-making loops",
+      "Ensure compliance with international safety, robotics, and aerospace regulations",
+      "Perform fail-safe simulation tests and automated chaos experiments",
+      "Bridge systems engineering with legal accountability and risk management",
+    ],
+    whyItMatters:
+      "When autonomous software and physical systems take real-world actions, safety, liability, and governance become mission-critical engineering requirements.",
+    technicalSkills: ["Systems engineering", "Formal verification", "Risk modeling", "Simulation environments", "Audit log architecture"],
+    humanSkills: ["Ethical rigor", "High-stakes judgment", "Regulatory translation"],
+    tools: ["ROS 2", "Digital twins", "Formal verification suites", "Compliance frameworks"],
+    currentRelevance: "Emerging — accelerating with physical AI, autonomous transport, and agentic automation.",
+    futureDirection: "Will become a foundational role as autonomous decision-making expands into mission-critical infrastructure.",
   },
   {
     id: "ai-product-engineer",
     title: "AI Product Engineer",
     category: "product",
+    demandGrowth: "~+360% by 2030",
     description:
       "Bridges product thinking and AI engineering to build user-facing products that leverage AI effectively while maintaining excellent user experience.",
     responsibilities: [
@@ -188,19 +263,20 @@ export const rolesData: Role[] = [
       "Balance AI capability with user needs and constraints",
     ],
     whyItMatters:
-      "AI technology alone does not create value — it needs to be integrated into products that users actually find helpful and trustworthy.",
+      "AI models provide raw potential; product engineers turn that potential into intuitive, dependable software that delivers real human value.",
     technicalSkills: ["Full-stack development", "AI APIs", "UX engineering", "A/B testing", "Performance optimization"],
     humanSkills: ["Product thinking", "User empathy", "Communication", "Iterative design"],
     tools: ["Modern web frameworks", "AI SDKs", "Analytics platforms", "Design tools", "Prototyping tools"],
     currentRelevance:
-      "Growing — as AI features become expected in products, this hybrid skill set is increasingly valuable.",
+      "High — hybrid engineering/product talent is among the most sought after in tech.",
     futureDirection:
-      "Likely to become one of the most in-demand roles as every product incorporates AI capabilities.",
+      "Will redefine product development into continuous human-AI experience optimization.",
   },
   {
     id: "automation-architect",
     title: "Automation Architect",
     category: "architecture",
+    demandGrowth: "~+380% by 2030",
     description:
       "Designs end-to-end automation strategies that combine AI, traditional automation, and human processes to optimize organizational workflows.",
     responsibilities: [
@@ -224,6 +300,7 @@ export const rolesData: Role[] = [
     id: "human-ai-interaction-designer",
     title: "Human-AI Interaction Designer",
     category: "design",
+    demandGrowth: "~+290% by 2030",
     description:
       "Designs the interactions, interfaces, and experiences through which humans collaborate with AI systems — ensuring clarity, trust, and effective collaboration.",
     responsibilities: [

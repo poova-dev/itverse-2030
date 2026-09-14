@@ -63,7 +63,14 @@ export default function RolesPage() {
                     >
                       <div className="flex items-start justify-between">
                         <div>
-                          <h3 className="text-base font-semibold text-text-primary">{role.title}</h3>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="text-base font-semibold text-text-primary">{role.title}</h3>
+                            {role.demandGrowth && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-accent-light text-accent border border-accent/20">
+                                {role.demandGrowth}
+                              </span>
+                            )}
+                          </div>
                           <p className="text-xs text-text-tertiary capitalize mt-0.5">{role.category}</p>
                         </div>
                         {isExpanded ? (

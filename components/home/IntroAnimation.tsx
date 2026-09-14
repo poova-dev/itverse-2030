@@ -22,13 +22,13 @@ const STORAGE_KEY = "itverse-intro-seen";
 //   - 1200 = Moderate / Balanced (current default)
 //   - 1600 = Slower / Cinematic
 //   - 2000 = Very slow
-export const DEFAULT_STEP_DURATION = 1200;
+export const DEFAULT_STEP_DURATION = 1600;
 
 // Pause in milliseconds on "2030+" before fading to the home page:
 //   - 600  = Quick transition
 //   - 1000 = Balanced pause (current default)
 //   - 1500 = Extended dramatic pause
-export const DEFAULT_PAUSE_BEFORE_EXIT = 1000;
+export const DEFAULT_PAUSE_BEFORE_EXIT = 1200;
 // ============================================================================
 
 interface IntroAnimationProps {
@@ -55,7 +55,7 @@ export function IntroAnimation({
         onComplete();
         return;
       }
-    } catch {}
+    } catch { }
 
     const timer = setInterval(() => {
       setCurrentStep((prev) => {
@@ -141,14 +141,12 @@ export function IntroAnimation({
               {steps.map((step, i) => (
                 <div
                   key={step.year}
-                  className={`relative transition-all duration-300 ${
-                    i <= currentStep ? "scale-110" : "scale-100"
-                  }`}
+                  className={`relative transition-all duration-300 ${i <= currentStep ? "scale-110" : "scale-100"
+                    }`}
                 >
                   <div
-                    className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                      i <= currentStep ? "bg-accent shadow-[0_0_8px_rgba(37,99,235,0.6)]" : "bg-white/20"
-                    }`}
+                    className={`w-2 h-2 rounded-full transition-colors duration-300 ${i <= currentStep ? "bg-accent shadow-[0_0_8px_rgba(37,99,235,0.6)]" : "bg-white/20"
+                      }`}
                   />
                 </div>
               ))}
