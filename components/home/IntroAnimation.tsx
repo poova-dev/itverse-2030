@@ -12,7 +12,7 @@ const steps = [
   { year: "2030+", signal: "Human judgment + intelligent systems" },
 ];
 
-const STORAGE_KEY = "itverse-intro-seen";
+const STORAGE_KEY = "itverse_intro_seen";
 
 // ============================================================================
 // TIMING CONFIGURATION (Change these numbers to adjust the speed)
@@ -50,7 +50,7 @@ export function IntroAnimation({
   useEffect(() => {
     try {
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const seen = sessionStorage.getItem(STORAGE_KEY);
+      const seen = localStorage.getItem(STORAGE_KEY);
       if (prefersReducedMotion || seen) {
         onComplete();
         return;
@@ -63,7 +63,7 @@ export function IntroAnimation({
           clearInterval(timer);
           setTimeout(() => {
             setVisible(false);
-            sessionStorage.setItem(STORAGE_KEY, "true");
+            localStorage.setItem(STORAGE_KEY, "true");
             setTimeout(onComplete, 700);
           }, pauseBeforeExit);
           return prev;
@@ -77,7 +77,7 @@ export function IntroAnimation({
 
   const handleSkip = useCallback(() => {
     setVisible(false);
-    sessionStorage.setItem(STORAGE_KEY, "true");
+    localStorage.setItem(STORAGE_KEY, "true");
     setTimeout(onComplete, 300);
   }, [onComplete]);
 

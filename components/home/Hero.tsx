@@ -1,151 +1,270 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowDown } from "lucide-react";
+import { ArrowRight, Play, Pause, Compass, Layers } from "lucide-react";
 
-const workflowSteps = [
-  { label: "Human", sub: "Define the problem", color: "#2563EB" },
-  { label: "AI / Agent", sub: "Analyze & implement", color: "#7C3AED" },
-  { label: "Execution", sub: "Automated pipeline", color: "#14B8A6" },
-  { label: "Human Review", sub: "Validate & decide", color: "#2563EB" },
-  { label: "Outcome", sub: "Shipped with confidence", color: "#16A34A" },
+interface YearPhase {
+  year: string;
+  stage: string;
+  sub: string;
+}
+
+const yearPhases: YearPhase[] = [
+  { year: "2026", stage: "Human + Tools", sub: "Individual software craft & IDE copilots" },
+  { year: "2027", stage: "AI-Assisted Work", sub: "Context-aware automated PRs & refactoring" },
+  { year: "2028", stage: "Intelligent Agents", sub: "Autonomous multi-step execution & testing" },
+  { year: "2029", stage: "Human + Agent Collaboration", sub: "Team orchestration & specification-first design" },
+  { year: "2030", stage: "AI-Integrated Teams", sub: "Self-healing distributed systems & governance" },
+  { year: "2030+", stage: "Human Judgment + Intelligent Systems", sub: "Strategic direction & moral accountability" },
 ];
 
 export function Hero() {
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [prefersReducedMotion] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
+
+  const [activeYearIndex, setActiveYearIndex] = useState(() => {
+    if (typeof window === "undefined") return 0;
+    try {
+      const savedYear = localStorage.getItem("itverse_last_year");
+      if (savedYear) {
+        const foundIdx = yearPhases.findIndex((p) => p.year === savedYear);
+        if (foundIdx !== -1) return foundIdx;
+      }
+    } catch {
+      // LocalStorage fallback
+    }
+    return 0;
+  });
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Record intro seen in LocalStorage on mount
+  useEffect(() => {
+    try {
+      localStorage.setItem("itverse_intro_seen", "true");
+    } catch {
+      // LocalStorage fallback
+    }
+  }, []);
+
+  // Year progression loop (documentary acceleration: 2026 -> 2027 -> 2028 -> 2029 -> 2030 -> 2030+)
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const interval = setInterval(() => {
+      setActiveYearIndex((prev) => {
+        const next = (prev + 1) % yearPhases.length;
+        try {
+          localStorage.setItem("itverse_last_year", yearPhases[next].year);
+        } catch { }
+        return next;
+      });
+    }, 4200);
+
+    return () => clearInterval(interval);
+  }, [prefersReducedMotion]);
+
+  const toggleVideoPlayback = () => {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const currentPhase = yearPhases[activeYearIndex];
+
   return (
-    <section className="relative pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden">
-      {/* Refined subtle background grid */}
-      <div
-        className="absolute inset-0 opacity-[0.025] pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(#0F172A 1px, transparent 1px), linear-gradient(to right, #0F172A 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
-        }}
-      />
+    <section
+      aria-label="ITVerse 2030+ Hero Section"
+      className="relative min-h-screen overflow-hidden bg-[#F8FAFC] flex flex-col justify-between"
+    >
+      {/* 1. Fullscreen Background Video Layer */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden select-none">
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          onLoadedData={() => setVideoLoaded(true)}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+            videoLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          aria-hidden="true"
+        >
+          <source
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260508_215831_c6a8989c-d716-4d8d-8745-e972a2eec711.mp4"
+            type="video/mp4"
+          />
+        </video>
 
-      <div className="container-default relative">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-          {/* Left — copy (7 cols) */}
-          <motion.div
-            className="lg:col-span-7"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            {/* Live research pill */}
-            <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-full bg-white border border-border text-xs font-medium text-text-secondary mb-6 shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-status-pulse" />
-              <span>Research-Backed Speculative Study · 2026 → 2030+</span>
-            </div>
+        {/* Video Fallback placeholder before streaming starts */}
+        {!videoLoaded && (
+          <div
+            className="absolute inset-0 bg-slate-900/10 animate-pulse"
+            aria-hidden="true"
+          />
+        )}
 
-            <h1 className="text-3xl md:text-[2.85rem] lg:text-[3.25rem] font-bold tracking-tight leading-[1.12] text-text-primary">
-              The Future of IT Is Not About Replacing People.
-            </h1>
-            <p className="mt-2 text-2xl md:text-3xl lg:text-[2.25rem] font-semibold tracking-tight text-accent leading-[1.2]">
-              It&apos;s About Changing How People Work.
+        {/* Cinematic Neutral Overlays for High-Contrast Text Legibility */}
+        {/* Desktop: gradient fade leaving video prominent on the right */}
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-[#F8FAFC]/95 via-[#F8FAFC]/80 to-transparent hidden md:block"
+          aria-hidden="true"
+        />
+        {/* Mobile: slightly denser scrim to guarantee WCAG AAA text contrast */}
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-[#F8FAFC]/95 via-[#F8FAFC]/85 to-[#F8FAFC]/90 md:hidden"
+          aria-hidden="true"
+        />
+        {/* Bottom edge subtle fade */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-[#F8FAFC] to-transparent"
+          aria-hidden="true"
+        />
+      </div>
+
+      {/* 2. Main Hero Foreground Content */}
+      <div className="relative z-10 container-wide pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-12 flex-1 flex flex-col justify-center">
+        <div className="max-w-2xl">
+          {/* Eyebrow */}
+          <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-[#E2E8F0] shadow-xs mb-6 sm:mb-8 transition-all hover:border-slate-300">
+            <span className="w-2 h-2 rounded-full bg-[#14B8A6] animate-pulse" />
+            <span className="text-[11px] sm:text-xs font-mono font-semibold uppercase tracking-[0.14em] text-[#2563EB]">
+              THE FUTURE OF IT · 2030+
+            </span>
+            <span className="text-slate-300">|</span>
+            <span className="text-[11px] text-[#475569] font-medium hidden sm:inline">
+              Living Research Platform
+            </span>
+          </div>
+
+          {/* Main Headline */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#0F172A] leading-[1.06]">
+            The way we build technology is changing.
+          </h1>
+
+          {/* Supporting Statement */}
+          <p className="mt-6 text-lg sm:text-xl text-[#475569] leading-relaxed font-normal">
+            AI will not simply change what developers build. It will change how teams think, collaborate, execute and make decisions.
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-3 sm:gap-4">
+            <Link
+              href="/shift"
+              className="group inline-flex items-center gap-2 px-6 py-3.5 text-sm sm:text-base font-semibold text-white bg-[#2563EB] hover:bg-blue-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 active:translate-y-[1px]"
+            >
+              <span>Explore 2030</span>
+              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </Link>
+
+            <Link
+              href="/shift"
+              className="inline-flex items-center gap-2 px-5 py-3.5 text-sm sm:text-base font-medium text-[#0F172A] bg-white/90 backdrop-blur-sm border border-[#E2E8F0] hover:bg-white hover:border-slate-300 rounded-lg transition-all duration-200 active:translate-y-[1px]"
+            >
+              <Layers className="w-4 h-4 text-[#475569]" />
+              <span>Understand the Shift</span>
+            </Link>
+          </div>
+
+          {/* Human-Centered Editorial Message */}
+          <div className="mt-8 pt-6 border-t border-[#E2E8F0]/70 flex flex-col gap-1.5 text-xs sm:text-sm text-[#475569]">
+            <p className="font-medium text-[#0F172A]">
+              The future is not humans vs. AI. It is humans working differently with intelligent systems.
             </p>
-            <p className="mt-6 text-base md:text-lg text-text-secondary leading-relaxed max-w-xl">
-              AI agents, automation fabrics, and cloud infrastructure are reshaping the nature of technical craft.
-              Explore how engineering roles, organizational workflows, and core skills will transition over the next decade.
+            <p className="text-xs text-[#475569]/80 italic">
+              2030 is not a destination. It is a direction.
             </p>
+          </div>
+        </div>
+      </div>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                href="/simulator"
-                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white bg-accent hover:bg-accent-hover rounded-lg transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
-              >
-                Assess Your Readiness
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/shift"
-                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-text-primary bg-white border border-border hover:border-gray-300 rounded-lg transition-all hover:-translate-y-0.5 shadow-xs"
-              >
-                Understand the Shift
-              </Link>
+      {/* 3. Hero Information Strip (Bottom Horizontal Evolution Bar) */}
+      <div className="relative z-10 border-t border-[#E2E8F0] bg-white/80 backdrop-blur-md">
+        <div className="container-wide py-4 sm:py-5">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            {/* Live Year Evolution Stages */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
+              <div className="flex items-center gap-1.5 sm:gap-2 min-w-max">
+                {yearPhases.map((phase, idx) => {
+                  const isActive = idx === activeYearIndex;
+                  return (
+                    <button
+                      key={phase.year}
+                      onClick={() => {
+                        setActiveYearIndex(idx);
+                        try {
+                          localStorage.setItem("itverse_last_year", phase.year);
+                        } catch { }
+                      }}
+                      className={`group relative text-left px-3 py-2 rounded-lg text-xs transition-all duration-200 ${
+                        isActive
+                          ? "bg-[#2563EB]/10 text-[#2563EB] border border-[#2563EB]/30 shadow-xs font-semibold"
+                          : "text-[#475569] hover:bg-slate-100 hover:text-[#0F172A] border border-transparent"
+                      }`}
+                      aria-current={isActive ? "step" : undefined}
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <span className={`font-mono font-bold ${isActive ? "text-[#2563EB]" : "text-[#0F172A]"}`}>
+                          {phase.year}
+                        </span>
+                        <span className="hidden xl:inline text-[11px] opacity-75 font-medium">
+                          {phase.stage}
+                        </span>
+                      </div>
+                      {/* Active indicator underline */}
+                      {isActive && (
+                        <span
+                          className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#2563EB] rounded-full"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            {/* Micro navigation pills */}
-            <div className="mt-10 pt-6 border-t border-border-light flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-text-tertiary">
-              <span className="font-semibold uppercase tracking-wider text-text-secondary text-[11px]">Jump to:</span>
-              <Link href="/timeline" className="hover:text-accent transition-colors">Timeline 2026–2031</Link>
-              <span>•</span>
-              <Link href="/roles" className="hover:text-accent transition-colors">10 Future Roles</Link>
-              <span>•</span>
-              <Link href="/skills" className="hover:text-accent transition-colors">Skills Radar</Link>
-              <span>•</span>
-              <Link href="/research" className="hover:text-accent transition-colors">15 Citations</Link>
-            </div>
-          </motion.div>
-
-          {/* Right — workflow orchestration console (5 cols) */}
-          <motion.div
-            className="lg:col-span-5"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <div className="card-elevated p-6 md:p-7 relative overflow-hidden">
-              <div className="flex items-center justify-between pb-4 mb-4 border-b border-border-light">
-                <div>
-                  <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-accent">
-                    Systems Orchestration Console
-                  </p>
-                  <p className="text-xs text-text-tertiary mt-0.5">Continuous Human-in-the-Loop Architecture</p>
-                </div>
-                <span className="px-2 py-0.5 text-[10px] font-mono font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-md">
-                  Active
+            {/* Current Evolution Detail & Video Controls */}
+            <div className="flex items-center justify-between lg:justify-end gap-4 border-t lg:border-t-0 pt-2.5 lg:pt-0 border-slate-100">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-ping" />
+                <span className="text-xs font-medium text-[#0F172A]">
+                  {currentPhase.year}: <span className="text-[#475569]">{currentPhase.stage}</span>
                 </span>
               </div>
 
-              <div className="space-y-0">
-                {workflowSteps.map((step, i) => (
-                  <motion.div
-                    key={step.label}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, delay: 0.4 + i * 0.1 }}
-                  >
-                    <div className="flex items-center gap-3.5 p-2 rounded-lg hover:bg-gray-50/80 transition-colors">
-                      {/* Node */}
-                      <div className="relative shrink-0">
-                        <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-mono font-bold shadow-xs"
-                          style={{ backgroundColor: step.color }}
-                        >
-                          {i + 1}
-                        </div>
-                      </div>
-                      {/* Label & Details */}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-text-primary leading-tight">{step.label}</p>
-                        <p className="text-xs text-text-tertiary leading-tight mt-0.5">{step.sub}</p>
-                      </div>
-                      {/* Status indicator */}
-                      <span className="text-[10px] font-mono text-text-tertiary shrink-0">
-                        {i === 0 || i === 3 ? "Human" : "System"}
-                      </span>
-                    </div>
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/timeline"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-[#2563EB] hover:underline"
+                >
+                  <span>Timeline</span>
+                  <Compass className="w-3.5 h-3.5" />
+                </Link>
 
-                    {/* Connector line */}
-                    {i < workflowSteps.length - 1 && (
-                      <div className="flex items-center ml-6 py-0.5">
-                        <div className="w-px h-4 bg-border" />
-                        <ArrowDown className="w-2.5 h-2.5 text-text-tertiary ml-[-5px] mt-0.5" />
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-
-              <div className="mt-5 pt-4 border-t border-border-light flex items-center justify-between text-[11px] text-text-tertiary font-mono">
-                <span>Loop: Deterministic Verification</span>
-                <span className="text-accent font-semibold">100% Policy-Safe</span>
+                <button
+                  type="button"
+                  onClick={toggleVideoPlayback}
+                  aria-label={isPlaying ? "Pause background documentary video" : "Play background documentary video"}
+                  className="p-1.5 rounded-md hover:bg-slate-100 text-[#475569] hover:text-[#0F172A] transition-colors"
+                  title={isPlaying ? "Pause video" : "Play video"}
+                >
+                  {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                </button>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
