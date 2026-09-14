@@ -31,7 +31,7 @@ const footerNav = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-white">
+    <footer className="mt-24 md:mt-36 border-t border-border bg-white">
       <div className="container-wide py-16 md:py-20">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {/* Brand column */}
