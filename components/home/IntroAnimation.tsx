@@ -13,8 +13,8 @@ const steps = [
 ];
 
 const STORAGE_KEY = "itverse-intro-seen";
-const STEP_DURATION = 450;
-const PAUSE_BEFORE_EXIT = 300;
+const STEP_DURATION = 1150;
+const PAUSE_BEFORE_EXIT = 900;
 
 interface IntroAnimationProps {
   onComplete: () => void;
@@ -41,7 +41,7 @@ export function IntroAnimation({ onComplete }: IntroAnimationProps) {
           setTimeout(() => {
             setVisible(false);
             sessionStorage.setItem(STORAGE_KEY, "true");
-            setTimeout(onComplete, 400);
+            setTimeout(onComplete, 700);
           }, PAUSE_BEFORE_EXIT);
           return prev;
         }
@@ -55,7 +55,7 @@ export function IntroAnimation({ onComplete }: IntroAnimationProps) {
   const handleSkip = useCallback(() => {
     setVisible(false);
     sessionStorage.setItem(STORAGE_KEY, "true");
-    setTimeout(onComplete, 200);
+    setTimeout(onComplete, 300);
   }, [onComplete]);
 
   return (
@@ -63,19 +63,22 @@ export function IntroAnimation({ onComplete }: IntroAnimationProps) {
       {visible && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.4 }}
+          exit={{ opacity: 0, scale: 1.02 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-[100] bg-[#0F172A] flex flex-col items-center justify-center overflow-hidden"
         >
+          {/* Subtle ambient glow behind year */}
+          <div className="absolute w-96 h-96 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
+
           {/* Year display */}
           <div className="relative h-24 flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
-                initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: -20, filter: "blur(4px)" }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 20, scale: 0.96, filter: "blur(6px)" }}
+                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: -20, scale: 1.02, filter: "blur(6px)" }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                 className="text-center"
               >
                 <div className="text-5xl md:text-7xl font-bold text-white tracking-tight font-mono">
@@ -90,11 +93,11 @@ export function IntroAnimation({ onComplete }: IntroAnimationProps) {
             <AnimatePresence mode="wait">
               <motion.p
                 key={currentStep}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.7 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2, delay: 0.1 }}
-                className="text-sm md:text-base text-white/70 tracking-wide"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 0.85, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
+                className="text-sm md:text-base text-white/80 tracking-wide font-medium"
               >
                 {steps[currentStep].signal}
               </motion.p>
@@ -103,22 +106,28 @@ export function IntroAnimation({ onComplete }: IntroAnimationProps) {
 
           {/* Timeline bar */}
           <div className="mt-12 w-64 md:w-80">
-            <div className="h-0.5 bg-white/10 rounded-full overflow-hidden">
+            <div className="h-1 bg-white/10 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-gradient-to-r from-[#2563EB] to-[#7C3AED] rounded-full"
+                className="h-full bg-gradient-to-r from-[#2563EB] via-[#3B82F6] to-[#7C3AED] rounded-full"
                 initial={{ width: "0%" }}
                 animate={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               />
             </div>
-            <div className="flex justify-between mt-2">
+            <div className="flex justify-between mt-3 px-0.5">
               {steps.map((step, i) => (
                 <div
                   key={step.year}
-                  className={`w-1.5 h-1.5 rounded-full transition-colors duration-200 ${
-                    i <= currentStep ? "bg-[#2563EB]" : "bg-white/20"
+                  className={`relative transition-all duration-300 ${
+                    i <= currentStep ? "scale-110" : "scale-100"
                   }`}
-                />
+                >
+                  <div
+                    className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                      i <= currentStep ? "bg-accent shadow-[0_0_8px_rgba(37,99,235,0.6)]" : "bg-white/20"
+                    }`}
+                  />
+                </div>
               ))}
             </div>
           </div>
@@ -126,7 +135,7 @@ export function IntroAnimation({ onComplete }: IntroAnimationProps) {
           {/* Skip button */}
           <button
             onClick={handleSkip}
-            className="absolute bottom-8 right-8 text-xs text-white/40 hover:text-white/70 transition-colors tracking-wide uppercase"
+            className="absolute bottom-8 right-8 text-xs text-white/40 hover:text-white/80 transition-colors tracking-wide uppercase px-3 py-1.5 rounded-md hover:bg-white/5 cursor-pointer"
           >
             Skip intro →
           </button>
